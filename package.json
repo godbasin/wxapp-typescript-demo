@@ -1,0 +1,36 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "gulp",
+    "build": "gulp build",
+    "tsc": "./node_modules/typescript/bin/tsc",
+    "compile": "tsc"
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.3.1",
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-changed": "^3.2.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-imagemin": "^5.0.3",
+    "gulp-less": "^4.0.1",
+    "gulp-postcss": "^8.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sync": "^0.1.4",
+    "gulp-text-simple": "^0.4.4",
+    "gulp-typescript": "^5.0.0-alpha.3",
+    "husky": "^1.1.4",
+    "imagemin-pngquant": "^6.0.0",
+    "path": "^0.12.7",
+    "prettier": "^1.15.2",
+    "pretty-quick": "^1.8.0",
+    "tslint-config-prettier": "^1.16.0",
+    "typescript": "^3.1.6"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}
