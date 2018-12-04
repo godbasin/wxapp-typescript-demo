@@ -17,6 +17,7 @@
     "gulp-less": "^4.0.1",
     "gulp-postcss": "^8.0.0",
     "gulp-rename": "^1.4.0",
+    "gulp-sourcemaps": "^2.6.4",
     "gulp-sync": "^0.1.4",
     "gulp-text-simple": "^0.4.4",
     "gulp-typescript": "^5.0.0-alpha.3",

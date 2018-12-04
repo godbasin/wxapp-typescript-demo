@@ -13,6 +13,7 @@ var textTransformation = require("gulp-text-simple");
 var del = require("del");
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
+var sourcemaps = require("gulp-sourcemaps");
 
 //项目路径
 var option = {
@@ -20,7 +21,12 @@ var option = {
   allowEmpty: true
 };
 var dist = __dirname + "/dist";
-var copyPath = ["src/**/!(_)*.*", "!src/**/*.less", "!src/**/*.ts", "!src/img/**"];
+var copyPath = [
+  "src/**/!(_)*.*",
+  "!src/**/*.less",
+  "!src/**/*.ts",
+  "!src/img/**"
+];
 var imgPath = ["src/img/*.{png,jpg,gif}"];
 var lessPath = ["src/**/*.less", "src/app.less"];
 var watchLessPath = ["src/**/*.less", "src/css/**/*.less", "src/app.less"];
@@ -28,7 +34,7 @@ var tsPath = ["src/**/*.ts", "src/app.ts"];
 
 //清空目录
 gulp.task("clear", () => {
-  return gulp.src(dist).pipe(clear());
+  return gulp.src(dist, { allowEmpty: true }).pipe(clear());
 });
 
 //复制不包含less和图片的文件
@@ -126,10 +132,13 @@ gulp.task("lessChange", () => {
 });
 
 // 编译
-gulp.task("tsCompile", function () {
-  return tsProject.src()
-      .pipe(tsProject())
-      .js.pipe(gulp.dest("dist"));
+gulp.task("tsCompile", function() {
+  return tsProject
+    .src()
+    .pipe(sourcemaps.init())
+    .pipe(tsProject())
+    .js.pipe(sourcemaps.write())
+    .pipe(gulp.dest("dist"));
 });
 
 //监听
@@ -170,7 +179,7 @@ gulp.task(
       // async
       "copy",
       "img",
-      "less", 
+      "less",
       "tsCompile"
     )
   )
