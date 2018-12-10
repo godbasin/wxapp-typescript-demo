@@ -74,6 +74,7 @@ export function dealWithCode({
   resolve
 }: IDealWithCodeOption) {
   const dataResponse: ICommonResponse = response.data;
+  // 此处用作业务错误码判断和处理
   if (dataResponse.return_code === 0) {
     resolve(response);
   } else {

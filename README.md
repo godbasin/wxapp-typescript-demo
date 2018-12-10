@@ -5,7 +5,7 @@
 - 使用 tslint + prettier 格式代码规范
 - 使用小程序官方 typing 库
 
-``` bash
+```bash
 # 安装依赖
 npm install
 
@@ -13,7 +13,7 @@ npm install
 npm install gulp prettier typescript --global
 
 # 启动代码
-npm run build
+npm run dev
 
 # 打包代码
 npm run build

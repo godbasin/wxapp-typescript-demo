@@ -1,4 +1,4 @@
-import { doLogin } from "./login";
+import { doLogin } from "../../api/login";
 import { SESSION_KEY } from "../../config/global-config";
 
 let isCheckingSession = false;
@@ -28,7 +28,7 @@ export function checkSession(): Promise<string> {
         fail: () => {
           // session_key 已经失效，需要重新执行登录流程
           wx.removeStorage({
-            key: "skey",
+            key: SESSION_KEY,
             complete: () => {
               doLogin()
                 .then(() => {
