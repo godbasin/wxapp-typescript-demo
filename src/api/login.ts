@@ -52,7 +52,7 @@ export function doLogin(): Promise<string> {
                 isLogining = false;
                 // 保存登录态
                 if (data.return_code === 0) {
-                  wx.setStorageSync(SESSION_KEY, data[SESSION_KEY]);
+                  wx.setStorageSync(SESSION_KEY, (data as any)[SESSION_KEY]);
                   resolve();
                 } else {
                   wx.showToast({ title: data.return_msg, icon: "none" });
