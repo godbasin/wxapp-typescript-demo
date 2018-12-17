@@ -184,15 +184,3 @@ gulp.task(
     )
   )
 );
-/*
-
-安装依赖：tnpm install
-构建:gulp
-监听目录：gulp watch
-
-注意！！！！！
-将node_moudules和dist两个文件夹忽略，具体操作：
-
-选中文件夹->右键->Tortoise SVN->Unversion and add to ignore list
-
-*/

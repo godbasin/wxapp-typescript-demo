@@ -2,7 +2,7 @@
   "name": "demo",
   "version": "1.0.0",
   "scripts": {
-    "dev": "gulp",
+    "dev": "gulp --continue",
     "build": "gulp build",
     "tsc": "./node_modules/typescript/bin/tsc",
     "compile": "tsc"
