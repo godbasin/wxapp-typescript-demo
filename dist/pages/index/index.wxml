@@ -10,4 +10,5 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+  <button bind:tap="gotoWatch"> 去 watch behavior 页面 </button>
 </view>

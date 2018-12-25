@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "miniprogram-computed": "0.0.6"
+    "miniprogram-computed": "0.0.6",
+    "miniprogram-watch": "0.0.2",
+    "moment": "^2.23.0",
+    "wxapp-session-request": "^1.1.0"
   }
 }

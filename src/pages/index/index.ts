@@ -17,6 +17,11 @@ Page({
       url: "../logs/logs"
     });
   },
+  gotoWatch() {
+    wx.navigateTo({
+      url: "../watch/watch"
+    });
+  },
   onLoad() {
     if (app.globalData.userInfo) {
       this.setData!({
