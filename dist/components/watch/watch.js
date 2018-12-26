@@ -1,4 +1,4 @@
-const watchBehavior = require("miniprogram-computed");
+const watchBehavior = require("miniprogram-watch");
 
 Component({
   behaviors: [watchBehavior],
@@ -20,9 +20,6 @@ Component({
   watch: {
     propA(val, oldVal) {
       console.log("propA new: %s, old: %s", val, oldVal);
-      this.setData({
-        a: oldVal
-      });
     },
     a(val, oldVal) {
       console.log("a new: %s, old: %s", val, oldVal);
