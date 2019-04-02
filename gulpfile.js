@@ -1,15 +1,11 @@
 var gulp = require("gulp");
-var gulpsync = require("gulp-sync")(gulp);
 var path = require("path");
 var rename = require("gulp-rename");
 var less = require("gulp-less");
 var postcss = require("gulp-postcss");
 var changed = require("gulp-changed");
 var autoprefixer = require("autoprefixer");
-var imagemin = require("gulp-imagemin");
-var pngquant = require("imagemin-pngquant");
 var clear = require("gulp-clean");
-var textTransformation = require("gulp-text-simple");
 var del = require("del");
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
@@ -21,13 +17,7 @@ var option = {
   allowEmpty: true
 };
 var dist = __dirname + "/dist";
-var copyPath = [
-  "src/**/!(_)*.*",
-  "!src/**/*.less",
-  "!src/**/*.ts",
-  "!src/img/**"
-];
-var imgPath = ["src/img/*.{png,jpg,gif}"];
+var copyPath = ["src/**/!(_)*.*", "!src/**/*.less", "!src/**/*.ts"];
 var lessPath = ["src/**/*.less", "src/app.less"];
 var watchLessPath = ["src/**/*.less", "src/css/**/*.less", "src/app.less"];
 var tsPath = ["src/**/*.ts", "src/app.ts"];
@@ -48,48 +38,6 @@ gulp.task("copyChange", () => {
     .pipe(changed(dist))
     .pipe(gulp.dest(dist));
 });
-
-//图片压缩
-gulp.task("img", () => {
-  return gulp
-    .src(imgPath, option)
-    .pipe(
-      imagemin({
-        progressive: true,
-        use: [pngquant()]
-      })
-    )
-    .pipe(gulp.dest(dist));
-});
-//图片压缩(只改动有变动的文件）
-gulp.task("imgChange", () => {
-  return gulp
-    .src(imgPath, option)
-    .pipe(changed(dist))
-    .pipe(
-      imagemin({
-        progressive: true,
-        use: [
-          pngquant({
-            quality: "65-80",
-            speed: 4
-          })
-        ]
-      })
-    )
-    .pipe(gulp.dest(dist));
-});
-
-/* 转换px为rpx，
- * 1.匹配数字(含小数点)结合px的字符串，例如55px或者0.5px，
- * 2.不匹配空格，不匹配base64编码，如EAAAAQAQAABA4pxA或者5 px
- */
-var transformPxToRpx = function(s) {
-  return s.replace(/\b(\d+(\.\d+)?)px\b/g, function(word) {
-    return word.replace(/px/g, "rpx");
-  });
-};
-var myTransformation = textTransformation(transformPxToRpx);
 
 //编译less
 gulp.task("less", () => {
@@ -146,7 +94,6 @@ gulp.task("watch", () => {
   gulp.watch(tsPath, gulp.series("tsCompile"));
   var watcher = gulp.watch(copyPath, gulp.series("copyChange"));
   gulp.watch(watchLessPath, gulp.series("less")); //Change
-  gulp.watch(imgPath, gulp.series("imgChange"));
   watcher.on("change", function(event) {
     if (event.type === "deleted") {
       var filepath = event.path;
@@ -164,7 +111,7 @@ gulp.task(
   "default",
   gulp.series(
     // sync
-    gulp.parallel("copy", "img", "less", "tsCompile"),
+    gulp.parallel("copy", "less", "tsCompile"),
     "watch"
   )
 );
@@ -178,7 +125,6 @@ gulp.task(
     gulp.parallel(
       // async
       "copy",
-      "img",
       "less",
       "tsCompile"
     )
