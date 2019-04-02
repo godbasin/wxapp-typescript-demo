@@ -34,5 +34,7 @@
       "pre-commit": "pretty-quick --staged"
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "we-request": "^1.2.5"
+  }
 }
