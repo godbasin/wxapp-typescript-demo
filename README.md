@@ -40,7 +40,7 @@ npm run build
 │  ├─utils                           //工具库
 │  ├─config                           //配置文档
 │     ├─cgi-config.ts                //cgi接口配置
-│     ├─global-config.ts                //全局配置
+│     ├─we-request.ts                //请求配置
 │  ├─pages                          //小程序相关页面
 │
 │  project.config.json              //小程序配置文件
@@ -51,13 +51,11 @@ npm run build
 │  tslint.json                     //代码风格配置
 ```
 
-## 公共库使用说明
+## we-request 使用说明
 
-### utils/request
+### config/we-request
 
-通用请求，处理包括 session 过期自动拉取登录接口续期等逻辑。（适用于有单个登录接口来获取 session 的场景）
-使用方式：
+通用请求，处理包括 session 过期自动拉取登录接口续期等逻辑。
+使用方式请查阅：https://github.com/IvinWu/weRequest/tree/2.x.x
 
-1. 在`config/global-config.ts`文件里，更新`SESSION_KEY`的值（后台接口协议返回 key，例如`"sessionId"`）。
-2. 如果有其他需要全局携带的参数，需要在`utils/request/index.ts`文件里，`dataWithSession`中带上。
-3. 在`config/global-config.ts`文件里，更新`LOGIN_FAIL_CODES`的值（错误码若为该数组中的一个，则会重新拉起登录，再继续发起请求）。
+若项目适用于有单个登录接口来获取 session 的场景，请自行修改 `src/package.json`，将`we-request`版本修改为`1.2.0`，其使用方式请查阅：https://github.com/IvinWu/weRequest/tree/1.2.0
