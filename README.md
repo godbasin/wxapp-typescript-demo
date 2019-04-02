@@ -17,6 +17,8 @@ cd src
 npm install
 # 安装完成，需要在小程序开发工具里【工具】-【构建npm】
 
+# 回退到上一级目录再启动
+cd ..
 # 启动代码
 npm run dev
 
