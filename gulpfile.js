@@ -10,6 +10,8 @@ var del = require("del");
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
 var sourcemaps = require("gulp-sourcemaps");
+var jsonTransform = require("gulp-json-transform");
+var projectConfig = require("./package.json");
 
 //项目路径
 var option = {
@@ -39,6 +41,45 @@ gulp.task("copyChange", () => {
     .pipe(gulp.dest(dist));
 });
 
+// 增加dependencies
+var dependencies = projectConfig && projectConfig.dependencies; // dependencies配置
+var nodeModulesCopyPath = [];
+for (let d in dependencies) {
+  nodeModulesCopyPath.push("node_modules/" + d + "/**/*");
+}
+//项目路径
+var copyNodeModuleOption = {
+  base: ".",
+  allowEmpty: true
+};
+
+//复制依赖的node_modules文件
+gulp.task("copyNodeModules", () => {
+  return gulp
+    .src(nodeModulesCopyPath, copyNodeModuleOption)
+    .pipe(gulp.dest(dist));
+});
+//复制依赖的node_modules文件(只改动有变动的文件）
+gulp.task("copyNodeModulesChange", () => {
+  return gulp
+    .src(nodeModulesCopyPath, copyNodeModuleOption)
+    .pipe(changed(dist))
+    .pipe(gulp.dest(dist));
+});
+// 根据denpende生成package.json
+gulp.task("generatePackageJson", () => {
+  return gulp
+    .src("./package.json")
+    .pipe(
+      jsonTransform(function(data, file) {
+        return {
+          dependencies: dependencies
+        };
+      })
+    )
+    .pipe(gulp.dest("dist"));
+});
+
 //编译less
 gulp.task("less", () => {
   return gulp
@@ -50,7 +91,6 @@ gulp.task("less", () => {
       })
     )
     .pipe(postcss([autoprefixer]))
-    .pipe(myTransformation())
     .pipe(
       rename(function(path) {
         path.extname = ".wxss";
@@ -70,7 +110,6 @@ gulp.task("lessChange", () => {
       })
     )
     .pipe(postcss([autoprefixer]))
-    .pipe(myTransformation())
     .pipe(
       rename(function(path) {
         path.extname = ".wxss";
@@ -93,6 +132,7 @@ gulp.task("tsCompile", function() {
 gulp.task("watch", () => {
   gulp.watch(tsPath, gulp.series("tsCompile"));
   var watcher = gulp.watch(copyPath, gulp.series("copyChange"));
+  gulp.watch(nodeModulesCopyPath, gulp.series("copyNodeModulesChange"));
   gulp.watch(watchLessPath, gulp.series("less")); //Change
   watcher.on("change", function(event) {
     if (event.type === "deleted") {
@@ -111,7 +151,13 @@ gulp.task(
   "default",
   gulp.series(
     // sync
-    gulp.parallel("copy", "less", "tsCompile"),
+    gulp.parallel(
+      "copy",
+      "copyNodeModules",
+      "generatePackageJson",
+      "less",
+      "tsCompile"
+    ),
     "watch"
   )
 );
@@ -125,6 +171,8 @@ gulp.task(
     gulp.parallel(
       // async
       "copy",
+      "copyNodeModules",
+      "generatePackageJson",
       "less",
       "tsCompile"
     )

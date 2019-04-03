@@ -7,6 +7,12 @@
     "tsc": "./node_modules/typescript/bin/tsc",
     "compile": "tsc"
   },
+  "dependencies": {
+    "miniprogram-computed": "0.0.6",
+    "miniprogram-watch": "0.0.2",
+    "moment": "^2.23.0",
+    "wxapp-session-request": "^1.1.0"
+  },
   "devDependencies": {
     "autoprefixer": "^9.3.1",
     "del": "^3.0.0",
@@ -14,6 +20,7 @@
     "gulp-changed": "^3.2.0",
     "gulp-clean": "^0.4.0",
     "gulp-imagemin": "^5.0.3",
+    "gulp-json-transform": "^0.4.6",
     "gulp-less": "^4.0.1",
     "gulp-postcss": "^8.0.0",
     "gulp-rename": "^1.4.0",
@@ -33,6 +40,5 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  },
-  "dependencies": {}
+  }
 }
