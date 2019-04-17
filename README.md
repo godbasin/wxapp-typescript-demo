@@ -12,13 +12,10 @@ npm install
 # 全局安装依赖
 npm install gulp prettier typescript --global
 
-# 安装 src 项目依赖
-cd src
-npm install
-# 安装完成，需要在小程序开发工具里【工具】-【构建npm】
-
 # 启动代码
 npm run dev
+
+# 需要在小程序开发工具里【工具】-【构建npm】
 
 # 打包代码
 npm run build
@@ -50,6 +47,10 @@ npm run build
 │  tsconfig.json                     //typescript配置
 │  tslint.json                     //代码风格配置
 ```
+
+## 公共库使用说明
+
+**注意：`package.json`中的`dependencies`字段，依赖的包会被自动打包到`dist`里。**
 
 ## we-request 使用说明
 
