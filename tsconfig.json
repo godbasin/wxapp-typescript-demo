@@ -21,12 +21,6 @@
     "typeRoots": ["./typings"],
     "lib": ["es5", "es2015", "dom", "scripthost"]
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": [
-    "node_modules",
-    "miniprogram_dist",
-    "dist",
-    "**/*.spec.ts",
-    "typings"
-  ]
+  "include": ["./src/**/*.ts", "typings"],
+  "exclude": ["node_modules", "miniprogram_dist", "dist", "**/*.spec.ts"]
 }

@@ -1,5 +1,5 @@
 /*! *****************************************************************************
-Copyright (c) 2018 Tencent, Inc. All rights reserved. 
+Copyright (c) 2018 Tencent, Inc. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -8,10 +8,9 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ***************************************************************************** */
 
-
 declare namespace App {
   interface ILaunchOptions {
-    query: number
+    query: number;
   }
 
   interface IReferrerInfo {
@@ -25,87 +24,88 @@ declare namespace App {
      * - 1038（从另一个小程序返回）：来源小程序 appId
      * - 1043（公众号模板消息）：来源公众号 appId
      */
-    appId: string
+    appId: string;
     /** 来源小程序传过来的数据，scene=1037或1038时支持 */
-    extraData?: any
+    extraData?: any;
   }
 
-  type SceneValues = 1001
-  | 1005
-  | 1006
-  | 1007
-  | 1008
-  | 1011
-  | 1012
-  | 1013
-  | 1014
-  | 1017
-  | 1019
-  | 1020
-  | 1022
-  | 1023
-  | 1024
-  | 1025
-  | 1026
-  | 1027
-  | 1028
-  | 1029
-  | 1030
-  | 1031
-  | 1032
-  | 1034
-  | 1035
-  | 1036
-  | 1037
-  | 1038
-  | 1039
-  | 1042
-  | 1043
-  | 1044
-  | 1045
-  | 1046
-  | 1047
-  | 1048
-  | 1049
-  | 1052
-  | 1053
-  | 1054
-  | 1056
-  | 1057
-  | 1058
-  | 1059
-  | 1064
-  | 1067
-  | 1068
-  | 1069
-  | 1071
-  | 1072
-  | 1073
-  | 1074
-  | 1077
-  | 1078
-  | 1079
-  | 1081
-  | 1082
-  | 1084
-  | 1089
-  | 1090
-  | 1091
-  | 1092
-  | 1095
-  | 1096
-  | 1097
-  | 1099
-  | 1102
-  | 1103
-  | 1104
-  | number
+  type SceneValues =
+    | 1001
+    | 1005
+    | 1006
+    | 1007
+    | 1008
+    | 1011
+    | 1012
+    | 1013
+    | 1014
+    | 1017
+    | 1019
+    | 1020
+    | 1022
+    | 1023
+    | 1024
+    | 1025
+    | 1026
+    | 1027
+    | 1028
+    | 1029
+    | 1030
+    | 1031
+    | 1032
+    | 1034
+    | 1035
+    | 1036
+    | 1037
+    | 1038
+    | 1039
+    | 1042
+    | 1043
+    | 1044
+    | 1045
+    | 1046
+    | 1047
+    | 1048
+    | 1049
+    | 1052
+    | 1053
+    | 1054
+    | 1056
+    | 1057
+    | 1058
+    | 1059
+    | 1064
+    | 1067
+    | 1068
+    | 1069
+    | 1071
+    | 1072
+    | 1073
+    | 1074
+    | 1077
+    | 1078
+    | 1079
+    | 1081
+    | 1082
+    | 1084
+    | 1089
+    | 1090
+    | 1091
+    | 1092
+    | 1095
+    | 1096
+    | 1097
+    | 1099
+    | 1102
+    | 1103
+    | 1104
+    | number;
 
   interface ILaunchShowOption {
     /** 打开小程序的路径 */
-    path: string
+    path: string;
     /** 打开小程序的query */
-    query: IAnyObject
+    query: IAnyObject;
     /** 打开小程序的场景值
      * - 1001: 发现栏小程序主入口，「最近使用」列表（基础库2.2.4版本起包含「我的小程序」列表）
      * - 1005: 顶部搜索框的搜索结果页
@@ -177,60 +177,58 @@ declare namespace App {
      * - 1103: 发现栏小程序主入口，「我的小程序」列表（基础库2.2.4版本起废弃）
      * - 1104: 微信聊天主界面下拉，「我的小程序」栏（基础库2.2.4版本起废弃）
      */
-    scene: SceneValues
+    scene: SceneValues;
     /** shareTicket，详见 [获取更多转发信息]((转发#获取更多转发信息)) */
-    shareTicket: string
+    shareTicket: string;
     /** 当场景为由从另一个小程序或公众号或App打开时，返回此字段 */
-    referrerInfo?: IReferrerInfo
+    referrerInfo?: IReferrerInfo;
   }
 
   interface IPageNotFoundOption {
     /** 不存在页面的路径 */
-    path: string
+    path: string;
     /** 打开不存在页面的 query */
-    query: IAnyObject
+    query: IAnyObject;
     /** 是否本次启动的首个页面（例如从分享等入口进来，首个页面是开发者配置的分享页面） */
-    isEntryPage: boolean
+    isEntryPage: boolean;
   }
 
   interface AppInstance<T extends IAnyObject = {}> {
-  /** 生命周期回调—监听小程序初始化
-   *
-   * 小程序初始化完成时触发，全局只触发一次。
-   */
-  onLaunch?(options?: ILaunchShowOption): void
-  /** 生命周期回调—监听小程序显示
-   *
-   * 小程序启动，或从后台进入前台显示时
-   */
-  onShow?(options?: ILaunchShowOption): void
-  /** 生命周期回调—监听小程序隐藏
-   *
-   * 小程序从前台进入后台时
-   */
-  onHide?(): void
-  /** 错误监听函数
-   *
-   * 小程序发生脚本错误，或者 api
-   */
-  onError?(/** 错误信息，包含堆栈 */error?: string): void
-  /** 页面不存在监听函数
-   *
-   * 小程序要打开的页面不存在时触发，会带上页面信息回调该函数
-   *
-   * **注意：**
-   * 1. 如果开发者没有添加 `onPageNotFound` 监听，当跳转页面不存在时，将推入微信客户端原生的页面不存在提示页面。
-   * 2. 如果 `onPageNotFound` 回调中又重定向到另一个不存在的页面，将推入微信客户端原生的页面不存在提示页面，并且不再回调 `onPageNotFound`。
-   *
-   * 最低基础库： 1.9.90
-   */
-  onPageNotFound?(options?: IPageNotFoundOption): void
+    /** 生命周期回调—监听小程序初始化
+     *
+     * 小程序初始化完成时触发，全局只触发一次。
+     */
+    onLaunch?(options?: ILaunchShowOption): void;
+    /** 生命周期回调—监听小程序显示
+     *
+     * 小程序启动，或从后台进入前台显示时
+     */
+    onShow?(options?: ILaunchShowOption): void;
+    /** 生命周期回调—监听小程序隐藏
+     *
+     * 小程序从前台进入后台时
+     */
+    onHide?(): void;
+    /** 错误监听函数
+     *
+     * 小程序发生脚本错误，或者 api
+     */
+    onError?(/** 错误信息，包含堆栈 */ error?: string): void;
+    /** 页面不存在监听函数
+     *
+     * 小程序要打开的页面不存在时触发，会带上页面信息回调该函数
+     *
+     * **注意：**
+     * 1. 如果开发者没有添加 `onPageNotFound` 监听，当跳转页面不存在时，将推入微信客户端原生的页面不存在提示页面。
+     * 2. 如果 `onPageNotFound` 回调中又重定向到另一个不存在的页面，将推入微信客户端原生的页面不存在提示页面，并且不再回调 `onPageNotFound`。
+     *
+     * 最低基础库： 1.9.90
+     */
+    onPageNotFound?(options?: IPageNotFoundOption): void;
   }
 
   interface AppConstructor {
-    <T extends IAnyObject & AppInstance>(
-      options: AppInstance<T> & T
-    ): void
+    <T extends IAnyObject & AppInstance>(options: AppInstance<T> & T): void;
   }
 
   interface IGetAppOption {
@@ -238,13 +236,13 @@ declare namespace App {
      *
      * 最低基础库： 2.2.4
      */
-    allowDefault: boolean
+    allowDefault: boolean;
   }
 
   interface GetApp {
-    <T extends IAnyObject>(opts?: IGetAppOption): AppInstance<T> & T
+    <T extends IAnyObject>(opts?: IGetAppOption): AppInstance<T> & T;
   }
 }
 
-declare const App: App.AppConstructor
-declare const getApp: App.GetApp
+declare const App: App.AppConstructor;
+declare const getApp: App.GetApp;
