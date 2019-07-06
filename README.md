@@ -4,6 +4,7 @@
 - 使用 typescript 编译
 - 使用 tslint + prettier 格式代码规范
 - 使用小程序官方 typing 库
+- npm 依赖包自动打包
 
 ```bash
 # 安装依赖
@@ -14,8 +15,6 @@ npm install gulp prettier typescript --global
 
 # 启动代码
 npm run dev
-
-# 需要在小程序开发工具里【工具】-【构建npm】
 
 # 打包代码
 npm run build
@@ -47,8 +46,6 @@ npm run build
 │  tsconfig.json                     //typescript配置
 │  tslint.json                     //代码风格配置
 ```
-
-**注意：`package.json`中的`dependencies`字段，依赖的包会被自动打包到`dist`里。**
 
 ## 公共库使用说明
 

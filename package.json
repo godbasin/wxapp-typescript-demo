@@ -16,6 +16,7 @@
   "devDependencies": {
     "autoprefixer": "^9.3.1",
     "del": "^3.0.0",
+    "dependency-tree": "^6.1.0",
     "gulp": "^4.0.0",
     "gulp-changed": "^3.2.0",
     "gulp-clean": "^0.4.0",
@@ -26,15 +27,17 @@
     "gulp-rename": "^1.4.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-sync": "^0.1.4",
-    "gulp-text-simple": "^0.4.4",
     "gulp-typescript": "^5.0.0-alpha.3",
     "husky": "^1.1.4",
-    "imagemin-pngquant": "^6.0.0",
     "path": "^0.12.7",
     "prettier": "^1.15.2",
     "pretty-quick": "^1.8.0",
+    "read-pkg-up": "^4.0.0",
+    "through2": "^2.0.3",
     "tslint-config-prettier": "^1.16.0",
-    "typescript": "^3.1.6"
+    "typescript": "^3.1.6",
+    "webpack": "^4.12.2",
+    "match-requires": "^2.0.1"
   },
   "husky": {
     "hooks": {

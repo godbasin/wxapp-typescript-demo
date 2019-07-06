@@ -13,6 +13,19 @@ var sourcemaps = require("gulp-sourcemaps");
 var jsonTransform = require("gulp-json-transform");
 var projectConfig = require("./package.json");
 
+const through = require("through2");
+const dependency = require("dependency-tree");
+const webpack = require("webpack");
+const readPkg = require("read-pkg-up");
+const matches = require("match-requires");
+
+function handlerRelivePaht(relative) {
+  if (path.sep === "\\") {
+    relative = relative.split(path.sep).join("/");
+  }
+  return /^\./.test(relative) ? relative : `./${relative}`;
+}
+
 //项目路径
 var option = {
   base: "src",
@@ -53,28 +66,39 @@ var copyNodeModuleOption = {
   allowEmpty: true
 };
 
-//复制依赖的node_modules文件
-gulp.task("copyNodeModules", () => {
+// //复制依赖的node_modules文件
+// gulp.task("copyNodeModules", () => {
+//   return gulp
+//     .src(nodeModulesCopyPath, copyNodeModuleOption)
+//     .pipe(gulp.dest(dist));
+// });
+// //复制依赖的node_modules文件(只改动有变动的文件）
+// gulp.task("copyNodeModulesChange", () => {
+//   return gulp
+//     .src(nodeModulesCopyPath, copyNodeModuleOption)
+//     .pipe(changed(dist))
+//     .pipe(gulp.dest(dist));
+// });
+// // 根据denpende生成package.json
+// gulp.task("generatePackageJson", () => {
+//   return gulp
+//     .src("./package.json")
+//     .pipe(
+//       jsonTransform(function(data, file) {
+//         return {
+//           dependencies: dependencies
+//         };
+//       })
+//     )
+//     .pipe(gulp.dest("dist"));
+// });
+
+gulp.task("npm", () => {
   return gulp
-    .src(nodeModulesCopyPath, copyNodeModuleOption)
-    .pipe(gulp.dest(dist));
-});
-//复制依赖的node_modules文件(只改动有变动的文件）
-gulp.task("copyNodeModulesChange", () => {
-  return gulp
-    .src(nodeModulesCopyPath, copyNodeModuleOption)
-    .pipe(changed(dist))
-    .pipe(gulp.dest(dist));
-});
-// 根据denpende生成package.json
-gulp.task("generatePackageJson", () => {
-  return gulp
-    .src("./package.json")
+    .src("dist/**/*.js")
     .pipe(
-      jsonTransform(function(data, file) {
-        return {
-          dependencies: dependencies
-        };
+      npm({
+        dest: "dist"
       })
     )
     .pipe(gulp.dest("dist"));
@@ -132,7 +156,7 @@ gulp.task("tsCompile", function() {
 gulp.task("watch", () => {
   gulp.watch(tsPath, gulp.series("tsCompile"));
   var watcher = gulp.watch(copyPath, gulp.series("copyChange"));
-  gulp.watch(nodeModulesCopyPath, gulp.series("copyNodeModulesChange"));
+  // gulp.watch(nodeModulesCopyPath, gulp.series("copyNodeModulesChange"));
   gulp.watch(watchLessPath, gulp.series("less")); //Change
   watcher.on("change", function(event) {
     if (event.type === "deleted") {
@@ -153,11 +177,12 @@ gulp.task(
     // sync
     gulp.parallel(
       "copy",
-      "copyNodeModules",
-      "generatePackageJson",
+      // "copyNodeModules",
+      // "generatePackageJson",
       "less",
       "tsCompile"
     ),
+    "npm",
     "watch"
   )
 );
@@ -171,10 +196,114 @@ gulp.task(
     gulp.parallel(
       // async
       "copy",
-      "copyNodeModules",
-      "generatePackageJson",
+      // "copyNodeModules",
+      // "generatePackageJson",
       "less",
       "tsCompile"
-    )
+    ),
+    "npm"
   )
 );
+
+function npm(options) {
+  const npmCache = {};
+  const { dest = "dist" } = options;
+  return through.obj((file, encoding, callback) => {
+    // console.log(file);
+    if (file.isNull()) {
+      return callback(null, file);
+    }
+    const cwd = file.cwd;
+    const filePath = file.path;
+    // console.log(filePath);
+    const srcReg = new RegExp(`(\\${path.sep})src(?=\\${path.sep})`, "i");
+    const fileDistPath = path.dirname(filePath.replace(srcReg, `$1${dest}`));
+    let codeStr = file.contents.toString();
+    const tree = dependency({
+      filename: filePath,
+      directory: cwd,
+      detective: {
+        es6: {
+          mixedImports: true
+        }
+      },
+      filter: path => {
+        return /node_modules/i.test(path);
+      }
+    });
+
+    const dependencyTree = tree[filePath];
+    if (/[^\w_.-]async(?![\w_.-])/.test(codeStr)) {
+      const regeneratorPath = path.join(
+        cwd,
+        "node_modules",
+        "regenerator-runtime/runtime-module.js"
+      );
+      dependencyTree[regeneratorPath] = {};
+      codeStr = `import regeneratorRuntime from 'regenerator-runtime'\n${codeStr}`;
+    }
+
+    Object.keys(dependencyTree).forEach(entry => {
+      const dirname = path.dirname(entry);
+      const { pkg } = readPkg.sync({
+        cwd: dirname
+      });
+      let moduleName = pkg.name;
+      const outputFileName = path.basename(entry);
+      const distPath = path.join(cwd, dest, "npm", moduleName);
+      const outputFilePath = path.join(distPath, outputFileName);
+      const importReg = new RegExp(
+        `import\\s*(\\{?\s*[\\w_-]+\\s*\\}?)\\s*from\\s*['"]${moduleName}(?:[\\w_\\/-]+)*['"]`,
+        "i"
+      );
+      codeStr = codeStr.replace(
+        importReg,
+        `import $1 from '${handlerRelivePaht(
+          path.relative(fileDistPath, outputFilePath)
+        )}'`
+      );
+
+      const match = matches(codeStr);
+
+      match.forEach(function(m) {
+        if (m.name.indexOf("../") === -1 && m.name.indexOf("./") === -1) {
+          // 判断m.variable，是否存在
+          let templ;
+          if (m.variable) {
+            templ = `var ${m.variable} = require('${handlerRelivePaht(
+              path.relative(fileDistPath, outputFilePath)
+            )}')`;
+          } else {
+            templ = `require('${handlerRelivePaht(
+              path.relative(fileDistPath, outputFilePath)
+            )}')`;
+          }
+          codeStr = codeStr.replace(m.string, templ);
+        }
+      });
+
+      if (!npmCache[entry]) {
+        webpack(
+          {
+            mode: "production",
+            entry,
+            output: {
+              filename: outputFileName,
+              path: distPath,
+              libraryTarget: "commonjs2"
+            }
+          },
+          error => {
+            if (error) {
+              console.error(error);
+            }
+          }
+        );
+        npmCache[entry] = outputFilePath;
+      }
+    });
+    file.contents = Buffer.from(codeStr);
+
+    return callback(null, file);
+  });
+}
