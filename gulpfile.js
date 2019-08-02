@@ -31,7 +31,10 @@ var option = {
   base: "src",
   allowEmpty: true
 };
-var dist = __dirname + "/dist";
+// 此处为输出目录
+var builtPath = "dist";
+
+var dist = __dirname + "/" + builtPath;
 var copyPath = ["src/**/!(_)*.*", "!src/**/*.less", "!src/**/*.ts"];
 var lessPath = ["src/**/*.less", "src/app.less"];
 var watchLessPath = ["src/**/*.less", "src/css/**/*.less", "src/app.less"];
@@ -95,13 +98,13 @@ var copyNodeModuleOption = {
 
 gulp.task("npm", () => {
   return gulp
-    .src("dist/**/*.js")
+    .src(`${builtPath}/**/*.js`)
     .pipe(
       npm({
-        dest: "dist"
+        dest: builtPath
       })
     )
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest(builtPath));
 });
 
 //编译less
@@ -149,7 +152,7 @@ gulp.task("tsCompile", function() {
     .pipe(sourcemaps.init())
     .pipe(tsProject())
     .js.pipe(sourcemaps.write())
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest(builtPath));
 });
 
 //监听
@@ -158,15 +161,12 @@ gulp.task("watch", () => {
   var watcher = gulp.watch(copyPath, gulp.series("copyChange"));
   // gulp.watch(nodeModulesCopyPath, gulp.series("copyNodeModulesChange"));
   gulp.watch(watchLessPath, gulp.series("less")); //Change
-  watcher.on("change", function(event) {
-    if (event.type === "deleted") {
-      var filepath = event.path;
-      var filePathFromSrc = path.relative(path.resolve("src"), filepath);
-      // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
-      var destFilePath = path.resolve("dist", filePathFromSrc);
-      // console.log({filepath, filePathFromSrc, destFilePath})
-      del.sync(destFilePath);
-    }
+  watcher.on("unlink", function(filepath) {
+    var filePathFromSrc = path.relative(path.resolve("src"), filepath);
+    // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
+    var destFilePath = path.resolve(builtPath, filePathFromSrc);
+    // console.log({filepath, filePathFromSrc, destFilePath})
+    del.sync(destFilePath);
   });
 });
 
