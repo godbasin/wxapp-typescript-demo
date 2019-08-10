@@ -36,13 +36,13 @@ Component({
   },
   methods: {
     onTap() {
-      (this as any).setData({
+      this.setData({
         a: 2,
         "b.c.d": 3,
         "b.e[2][0]": 444,
         c: 123
       });
-      (this as any).triggerEvent("update", {}, {});
+      this.triggerEvent("update", {}, {});
     }
   }
 });
