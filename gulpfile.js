@@ -157,7 +157,7 @@ gulp.task("tsCompile", function() {
 
 //监听
 gulp.task("watch", () => {
-  gulp.watch(tsPath, gulp.series("tsCompile"));
+  gulp.watch(tsPath, gulp.series("tsCompile", "npm"));
   var watcher = gulp.watch(copyPath, gulp.series("copyChange"));
   // gulp.watch(nodeModulesCopyPath, gulp.series("copyNodeModulesChange"));
   gulp.watch(watchLessPath, gulp.series("less")); //Change
