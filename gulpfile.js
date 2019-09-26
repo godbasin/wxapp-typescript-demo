@@ -266,7 +266,11 @@ function npm(options) {
       const match = matches(codeStr);
 
       match.forEach(function(m) {
-        if (m.name.indexOf("../") === -1 && m.name.indexOf("./") === -1) {
+        if (
+          m.name.indexOf("../") === -1 &&
+          m.name.indexOf("./") === -1 &&
+          m.name === moduleName
+        ) {
           // 判断m.variable，是否存在
           let templ;
           if (m.variable) {
