@@ -19,7 +19,7 @@
     "pretty": true,
     "strictPropertyInitialization": true,
     "typeRoots": ["./typings"],
-    "lib": ["es5", "es2015", "dom", "scripthost"]
+    "lib": ["es5", "es2015", "scripthost"]
   },
   "include": ["./src/**/*.ts", "typings"],
   "exclude": ["node_modules", "miniprogram_dist", "dist", "**/*.spec.ts"]

@@ -11,40 +11,41 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 declare namespace WechatMiniprogram {
   namespace Behavior {
     type Instance<
-      TProperty extends Partial<PropertyOption>,
-      TData,
+      TData extends DataOption,
+      TProperty extends PropertyOption,
       TMethod extends MethodOption
-    > = WechatMiniprogram.Component.Instance<TProperty, TData, TMethod>;
+    > = Component.Instance<TData, TProperty, TMethod>;
     type TrivialInstance = Instance<IAnyObject, IAnyObject, IAnyObject>;
     type TrivialOption = Options<IAnyObject, IAnyObject, IAnyObject>;
     type Options<
-      TData,
-      TProperty extends Partial<PropertyOption>,
+      TData extends DataOption,
+      TProperty extends PropertyOption,
       TMethod extends MethodOption
-    > = Data<TData> &
+    > = Partial<Data<TData>> &
+      Partial<Property<TProperty>> &
+      Partial<Method<TMethod>> &
       Partial<OtherOption> &
       Partial<Lifetimes> &
-      TProperty &
-      Partial<Methods<TMethod>> &
-      ThisType<Instance<TProperty, TData, TMethod>>;
+      ThisType<Instance<TData, TProperty, TMethod>>;
     interface Constructor {
       <
-        TData,
-        TProperty extends Partial<PropertyOption>,
+        TData extends DataOption,
+        TProperty extends PropertyOption,
         TMethod extends MethodOption
       >(
         options: Options<TData, TProperty, TMethod>
       ): string;
     }
 
-    type Data<DataType> = WechatMiniprogram.Component.Data<DataType>;
-    type PropertyOption = WechatMiniprogram.Component.PropertyOption;
-    type MethodOption = WechatMiniprogram.Component.MethodOption;
-    type Methods<M extends MethodOption> = WechatMiniprogram.Component.Methods<
-      M
-    >;
-    type DefinitionFilter = WechatMiniprogram.Component.DefinitionFilter;
-    type Lifetimes = WechatMiniprogram.Component.Lifetimes;
+    type DataOption = Component.DataOption;
+    type PropertyOption = Component.PropertyOption;
+    type MethodOption = Component.MethodOption;
+    type Data<D extends DataOption> = Component.Data<D>;
+    type Property<P extends PropertyOption> = Component.Property<P>;
+    type Method<M extends MethodOption> = Component.Method<M>;
+
+    type DefinitionFilter = Component.DefinitionFilter;
+    type Lifetimes = Component.Lifetimes;
 
     interface OtherOption {
       /** 类似于mixins和traits的组件间代码复用机制，参见 [behaviors](behaviors.md) */

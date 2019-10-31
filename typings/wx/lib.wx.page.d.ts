@@ -10,27 +10,33 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 declare namespace WechatMiniprogram {
   namespace Page {
-    type Instance<DataType, CustomOption> = Lifetime &
+    type Instance<
+      TData extends DataOption,
+      TCustom extends CustomOption
+    > = OptionalInterface<ILifetime> &
       InstanceProperties &
-      InstanceMethods &
-      DataType &
-      CustomOption;
-    type Options<DataType, CustomOption> = (CustomOption &
-      Data<DataType> &
-      Partial<Lifetime>) &
-      ThisType<Instance<DataType, CustomOption>>;
+      InstanceMethods<TData> &
+      Data<TData> &
+      TCustom;
+    type Options<
+      TData extends DataOption,
+      TCustom extends CustomOption
+    > = (TCustom & Partial<Data<TData>> & Partial<ILifetime>) &
+      ThisType<Instance<TData, TCustom>>;
     type TrivialInstance = Instance<IAnyObject, IAnyObject>;
     interface Constructor {
-      <DataType, CustomOption>(options: Options<DataType, CustomOption>): void;
+      <TData extends DataOption, TCustom extends CustomOption>(
+        options: Options<TData, TCustom>
+      ): void;
     }
-    interface Lifetime {
+    interface ILifetime {
       /** 生命周期回调—监听页面加载
        *
        * 页面加载时触发。一个页面只会调用一次，可以在 onLoad 的参数中获取打开当前页面路径中的参数。
        */
       onLoad(
         /** 打开当前页面路径中的参数 */
-        query: { [queryKey: string]: string | undefined }
+        query: Record<string, string | undefined>
       ): void;
       /** 生命周期回调—监听页面显示
        *
@@ -38,10 +44,10 @@ declare namespace WechatMiniprogram {
        */
       onShow(): void;
       /** 生命周期回调—监听页面初次渲染完成
-       * 
+       *
        * 页面初次渲染完成时触发。一个页面只会调用一次，代表页面已经准备妥当，可以和视图层进行交互。
-       * 
-     
+       *
+
       * 注意：对界面内容进行设置的 API 如`wx.setNavigationBarTitle`，请在`onReady`之后进行。
       */
       onReady(): void;
@@ -88,7 +94,7 @@ declare namespace WechatMiniprogram {
        */
       onPageScroll(
         /** 页面滚动参数 */
-        options?: IPageScrollOption
+        options: IPageScrollOption
       ): void;
 
       /** 当前是 tab 页时，点击 tab 时触发，最低基础库： `1.9.0` */
@@ -111,9 +117,16 @@ declare namespace WechatMiniprogram {
       route: string;
     }
 
-    type InstanceMethods = WechatMiniprogram.Component.InstanceMethods;
+    type DataOption = Record<string, any>;
+    type CustomOption = Record<string, any>;
 
-    interface Data<DataType> {
+    type InstanceMethods<D extends DataOption> = Component.InstanceMethods<
+      D
+    > & {
+      getOpenerEventChannel(): EventChannel;
+    };
+
+    interface Data<D extends DataOption> {
       /** 页面的初始数据
        *
        * `data` 是页面第一次渲染使用的**初始数据**。
@@ -122,7 +135,7 @@ declare namespace WechatMiniprogram {
        *
        * 渲染层可以通过 `WXML` 对数据进行绑定。
        */
-      data?: DataType;
+      data: D;
     }
 
     interface ICustomShareContent {
@@ -179,7 +192,7 @@ declare namespace WechatMiniprogram {
     }
 
     interface getCurrentPages {
-      (): Instance<IAnyObject, IAnyObject>[];
+      (): Array<Instance<IAnyObject, IAnyObject>>;
     }
   }
 }

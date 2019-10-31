@@ -33,7 +33,7 @@ interface IAPISuccessParam {
 
 type IAPICompleteParam = IAPISuccessParam | IAPIError;
 
-type IAPIFunction<T, P extends IAPIParam<T>> = (param?: P) => Promise<T> | any;
+type IAPIFunction<T, P extends IAPIParam<T>> = (param?: P) => Promise<T>;
 
 interface IInitCloudConfig {
   env?:
@@ -72,132 +72,13 @@ interface ICloudMetaData {
 
 declare class InternalSymbol {}
 
-type AnyObject = {
+interface AnyObject {
   [x: string]: any;
-};
+}
 
 type AnyArray = any[];
 
 type AnyFunction = (...args: any[]) => any;
-
-/**
- * original wx
- */
-
-declare namespace WXNS {
-  interface AnyObject {
-    [key: string]: any;
-  }
-
-  interface IAPIParam<T> {
-    success?: (res: T) => void;
-    fail?: (err: IAPIError) => void;
-    complete?: (val: T | IAPIError) => void;
-  }
-
-  interface CommonAPIResult {
-    errMsg: string;
-  }
-
-  interface IAPIError {
-    errMsg: string;
-  }
-
-  interface IProgressUpdateEvent {
-    progress: number;
-    totalBytesWritten: number;
-    totalBytesExpectedToWrite: number;
-  }
-
-  interface operateWXData {
-    (param: any): void;
-  }
-
-  interface uploadFile {
-    /**
-     * upload file
-     * @param param
-     */
-    (param: IUploadFileParam): IUploadFileTask;
-  }
-
-  interface IUploadFileParam extends IAPIParam<IUploadFileSuccessResult> {
-    url: string;
-    filePath: string;
-    name: string;
-    header?: AnyObject;
-  }
-
-  interface IUploadFileSuccessResult extends CommonAPIResult {
-    data: string;
-    statusCode: number;
-  }
-
-  interface IUploadFileTask {
-    onProgressUpdate: (fn: (event: IProgressUpdateEvent) => void) => void;
-    abort: AnyFunction;
-  }
-
-  interface downloadFile {
-    /**
-     * download file
-     * @param param
-     */
-    (param: IDownloadFileParam): IDownloadFileTask;
-  }
-
-  interface IDownloadFileParam extends IAPIParam<IDownloadFileSuccessResult> {
-    url: string;
-    header?: AnyObject;
-  }
-
-  interface IDownloadFileSuccessResult extends CommonAPIResult {
-    tempFilePath: string;
-    statusCode: number;
-  }
-
-  interface IDownloadFileTask {
-    onProgressUpdate: (fn: (event: IProgressUpdateEvent) => void) => void;
-    abort: AnyFunction;
-  }
-
-  interface request {
-    (param: IRequestParam): IRequestTask;
-  }
-
-  interface IRequestParam extends IAPIParam<IRequestSuccessResult> {
-    url: string;
-    data?: AnyObject | string | ArrayBuffer;
-    header?: AnyObject;
-    method?: string;
-    dataType?: string;
-    responseType?: string;
-  }
-
-  interface IRequestSuccessResult {
-    data: AnyObject | string | ArrayBuffer;
-    statusCode: number;
-    header: AnyObject;
-  }
-
-  interface IRequestTask {
-    abort: () => void;
-  }
-
-  interface getFileInfo {
-    (param: IGetFileInfoParam): void;
-  }
-
-  interface IGetFileInfoParam extends IAPIParam<IGetFileInfoSuccessResult> {
-    filePath: string;
-    digestAlgorithm?: string;
-  }
-
-  interface IGetFileInfoSuccessResult {
-    size: number;
-    digest: string;
-  }
-}
 
 /**
  * extend wx with cloud
@@ -205,24 +86,19 @@ declare namespace WXNS {
 interface WxCloud {
   init: (config?: ICloudConfig) => void;
 
-  // callFunction: (param: ICloud.CallFunctionParam) => Promise<ICloud.CallFunctionResult> | void,
-
-  // uploadFile: (param: ICloud.UploadFileParam) => Promise<ICloud.UploadFileResult> | WXNS.IUploadFileTask,
-  // downloadFile: (param: ICloud.DownloadFileParam) => Promise<ICloud.DownloadFileResult> | WXNS.IDownloadFileTask,
-  // getTempFileURL: (param: ICloud.GetTempFileURLParam) => Promise<ICloud.GetTempFileURLResult> | void,
-  // deleteFile: (param: ICloud.DeleteFileParam) => Promise<ICloud.DeleteFileResult> | void,
-
   callFunction(param: OQ<ICloud.CallFunctionParam>): void;
   callFunction(
     param: RQ<ICloud.CallFunctionParam>
   ): Promise<ICloud.CallFunctionResult>;
 
-  uploadFile(param: OQ<ICloud.UploadFileParam>): WXNS.IUploadFileTask;
+  uploadFile(param: OQ<ICloud.UploadFileParam>): WechatMiniprogram.UploadTask;
   uploadFile(
     param: RQ<ICloud.UploadFileParam>
   ): Promise<ICloud.UploadFileResult>;
 
-  downloadFile(param: OQ<ICloud.DownloadFileParam>): WXNS.IDownloadFileTask;
+  downloadFile(
+    param: OQ<ICloud.DownloadFileParam>
+  ): WechatMiniprogram.DownloadTask;
   downloadFile(
     param: RQ<ICloud.DownloadFileParam>
   ): Promise<ICloud.DownloadFileResult>;
@@ -246,14 +122,13 @@ declare namespace ICloud {
   }
 
   // === API: callFunction ===
-  export type CallFunctionData = AnyObject;
+  type CallFunctionData = AnyObject;
 
-  export interface CallFunctionResult extends IAPISuccessParam {
+  interface CallFunctionResult extends IAPISuccessParam {
     result: AnyObject | string | undefined;
   }
 
-  export interface CallFunctionParam
-    extends ICloudAPIParam<CallFunctionResult> {
+  interface CallFunctionParam extends ICloudAPIParam<CallFunctionResult> {
     name: string;
     data?: CallFunctionData;
     slow?: boolean;
@@ -261,12 +136,12 @@ declare namespace ICloud {
   // === end ===
 
   // === API: uploadFile ===
-  export interface UploadFileResult extends IAPISuccessParam {
+  interface UploadFileResult extends IAPISuccessParam {
     fileID: string;
     statusCode: number;
   }
 
-  export interface UploadFileParam extends ICloudAPIParam<UploadFileResult> {
+  interface UploadFileParam extends ICloudAPIParam<UploadFileResult> {
     cloudPath: string;
     filePath: string;
     header?: AnyObject;
@@ -274,24 +149,23 @@ declare namespace ICloud {
   // === end ===
 
   // === API: downloadFile ===
-  export interface DownloadFileResult extends IAPISuccessParam {
+  interface DownloadFileResult extends IAPISuccessParam {
     tempFilePath: string;
     statusCode: number;
   }
 
-  export interface DownloadFileParam
-    extends ICloudAPIParam<DownloadFileResult> {
+  interface DownloadFileParam extends ICloudAPIParam<DownloadFileResult> {
     fileID: string;
     cloudPath?: string;
   }
   // === end ===
 
   // === API: getTempFileURL ===
-  export interface GetTempFileURLResult extends IAPISuccessParam {
+  interface GetTempFileURLResult extends IAPISuccessParam {
     fileList: GetTempFileURLResultItem[];
   }
 
-  export interface GetTempFileURLResultItem {
+  interface GetTempFileURLResultItem {
     fileID: string;
     tempFileURL: string;
     maxAge: number;
@@ -299,8 +173,7 @@ declare namespace ICloud {
     errMsg: string;
   }
 
-  export interface GetTempFileURLParam
-    extends ICloudAPIParam<GetTempFileURLResult> {
+  interface GetTempFileURLParam extends ICloudAPIParam<GetTempFileURLResult> {
     fileList: string[];
   }
   // === end ===
@@ -327,21 +200,21 @@ declare namespace DB {
   /**
    * The class of all exposed cloud database instances
    */
-  export class Database {
-    public readonly config: ICloudConfig;
-    public readonly command: DatabaseCommand;
-    public readonly Geo: IGeo;
-    public readonly serverDate: () => ServerDate;
-    public readonly RegExp: IRegExpConstructor;
+  class Database {
+    readonly config: ICloudConfig;
+    readonly command: DatabaseCommand;
+    readonly Geo: IGeo;
+    readonly serverDate: () => ServerDate;
+    readonly RegExp: IRegExpConstructor;
 
     private constructor();
 
     collection(collectionName: string): CollectionReference;
   }
 
-  export class CollectionReference extends Query {
-    public readonly collectionName: string;
-    public readonly database: Database;
+  class CollectionReference extends Query {
+    readonly collectionName: string;
+    readonly database: Database;
 
     private constructor(name: string, database: Database);
 
@@ -353,41 +226,25 @@ declare namespace DB {
     add(options: RQ<IAddDocumentOptions>): Promise<IAddResult>;
   }
 
-  export class DocumentReference {
+  class DocumentReference {
     private constructor(docId: string | number, database: Database);
 
     field(object: object): this;
 
-    // get(options?: IGetDocumentOptions): Promise<IQuerySingleResult> | void
-
-    // set(options?: ISetSingleDocumentOptions): Promise<ISetResult> | void
-
-    // update(options?: IUpdateSingleDocumentOptions): Promise<IUpdateResult> | void
-
-    // remove(options?: IRemoveSingleDocumentOptions): Promise<IRemoveResult> | void
-
-    // get(options?: IGetDocumentOptions): Promise<IQuerySingleResult> | void
-    get(): Promise<IQuerySingleResult>;
     get(options: OQ<IGetDocumentOptions>): void;
-    get(options: RQ<IGetDocumentOptions>): Promise<IQuerySingleResult>;
+    get(options?: RQ<IGetDocumentOptions>): Promise<IQuerySingleResult>;
 
-    // set(options?: ISetSingleDocumentOptions): Promise<ISetResult> | void
-    set(): Promise<ISetResult>;
     set(options: OQ<ISetSingleDocumentOptions>): void;
-    set(options: RQ<ISetSingleDocumentOptions>): Promise<ISetResult>;
+    set(options?: RQ<ISetSingleDocumentOptions>): Promise<ISetResult>;
 
-    // update(options?: IUpdateSingleDocumentOptions): Promise<IUpdateResult> | void
-    update(): Promise<IUpdateResult>;
     update(options: OQ<IUpdateSingleDocumentOptions>): void;
-    update(options: RQ<IUpdateSingleDocumentOptions>): Promise<IUpdateResult>;
+    update(options?: RQ<IUpdateSingleDocumentOptions>): Promise<IUpdateResult>;
 
-    // remove(options?: IRemoveSingleDocumentOptions): Promise<IRemoveResult> | void
-    remove(): Promise<IRemoveResult>;
     remove(options: OQ<IRemoveSingleDocumentOptions>): void;
-    remove(options: RQ<IRemoveSingleDocumentOptions>): Promise<IRemoveResult>;
+    remove(options?: RQ<IRemoveSingleDocumentOptions>): Promise<IRemoveResult>;
   }
 
-  export class Query {
+  class Query {
     where(condition: IQueryCondition): Query;
 
     orderBy(fieldPath: string, order: string): Query;
@@ -398,30 +255,14 @@ declare namespace DB {
 
     field(object: object): Query;
 
-    // get(options?: IGetDocumentOptions): Promise<IQueryResult> | void
-
-    // // update(options?: IUpdateDocumentOptions): Promise<IUpdateResult> | void
-
-    // // remove(options?: IRemoveDocumentOptions): Promise<IRemoveResult> | void
-
-    // count(options?: ICountDocumentOptions): Promise<ICountResult> | void
-
-    // get(options?: IGetDocumentOptions): Promise<IQueryResult> | void
-    get(): Promise<IQueryResult>;
     get(options: OQ<IGetDocumentOptions>): void;
-    get(options: RQ<IGetDocumentOptions>): Promise<IQueryResult>;
+    get(options?: RQ<IGetDocumentOptions>): Promise<IQueryResult>;
 
-    // update(options?: IUpdateDocumentOptions): Promise<IUpdateResult> | void
-
-    // remove(options?: IRemoveDocumentOptions): Promise<IRemoveResult> | void
-
-    // count(options?: ICountDocumentOptions): Promise<ICountResult> | void
-    count(): Promise<ICountResult>;
     count(options: OQ<ICountDocumentOptions>): void;
-    count(options: RQ<ICountDocumentOptions>): Promise<ICountResult>;
+    count(options?: RQ<ICountDocumentOptions>): Promise<ICountResult>;
   }
 
-  export interface DatabaseCommand {
+  interface DatabaseCommand {
     eq(val: any): DatabaseQueryCommand;
     neq(val: any): DatabaseQueryCommand;
     gt(val: any): DatabaseQueryCommand;
@@ -436,10 +277,10 @@ declare namespace DB {
     geoIntersects(options: IGeoIntersectsCommandOptions): DatabaseQueryCommand;
 
     and(
-      ...expressions: (DatabaseLogicCommand | IQueryCondition)[]
+      ...expressions: Array<DatabaseLogicCommand | IQueryCondition>
     ): DatabaseLogicCommand;
     or(
-      ...expressions: (DatabaseLogicCommand | IQueryCondition)[]
+      ...expressions: Array<DatabaseLogicCommand | IQueryCondition>
     ): DatabaseLogicCommand;
 
     set(val: any): DatabaseUpdateCommand;
@@ -453,29 +294,29 @@ declare namespace DB {
     unshift(...values: any[]): DatabaseUpdateCommand;
   }
 
-  export enum LOGIC_COMMANDS_LITERAL {
+  enum LOGIC_COMMANDS_LITERAL {
     AND = "and",
     OR = "or",
     NOT = "not",
     NOR = "nor"
   }
 
-  export class DatabaseLogicCommand {
-    public fieldName: string | InternalSymbol;
-    public operator: LOGIC_COMMANDS_LITERAL | string;
-    public operands: any[];
+  class DatabaseLogicCommand {
+    fieldName: string | InternalSymbol;
+    operator: LOGIC_COMMANDS_LITERAL | string;
+    operands: any[];
 
     _setFieldName(fieldName: string): DatabaseLogicCommand;
 
     and(
-      ...expressions: (DatabaseLogicCommand | IQueryCondition)[]
+      ...expressions: Array<DatabaseLogicCommand | IQueryCondition>
     ): DatabaseLogicCommand;
     or(
-      ...expressions: (DatabaseLogicCommand | IQueryCondition)[]
+      ...expressions: Array<DatabaseLogicCommand | IQueryCondition>
     ): DatabaseLogicCommand;
   }
 
-  export enum QUERY_COMMANDS_LITERAL {
+  enum QUERY_COMMANDS_LITERAL {
     // normal
     EQ = "eq",
     NEQ = "neq",
@@ -491,8 +332,8 @@ declare namespace DB {
     GEO_INTERSECTS = "geoIntersects"
   }
 
-  export class DatabaseQueryCommand extends DatabaseLogicCommand {
-    public operator: QUERY_COMMANDS_LITERAL | string;
+  class DatabaseQueryCommand extends DatabaseLogicCommand {
+    operator: QUERY_COMMANDS_LITERAL | string;
 
     _setFieldName(fieldName: string): DatabaseQueryCommand;
 
@@ -510,7 +351,7 @@ declare namespace DB {
     geoIntersects(options: IGeoIntersectsCommandOptions): DatabaseLogicCommand;
   }
 
-  export enum UPDATE_COMMANDS_LITERAL {
+  enum UPDATE_COMMANDS_LITERAL {
     SET = "set",
     REMOVE = "remove",
     INC = "inc",
@@ -521,10 +362,10 @@ declare namespace DB {
     UNSHIFT = "unshift"
   }
 
-  export class DatabaseUpdateCommand {
-    public fieldName: string | InternalSymbol;
-    public operator: UPDATE_COMMANDS_LITERAL;
-    public operands: any[];
+  class DatabaseUpdateCommand {
+    fieldName: string | InternalSymbol;
+    operator: UPDATE_COMMANDS_LITERAL;
+    operands: any[];
 
     constructor(
       operator: UPDATE_COMMANDS_LITERAL,
@@ -535,12 +376,12 @@ declare namespace DB {
     _setFieldName(fieldName: string): DatabaseUpdateCommand;
   }
 
-  export class Batch {}
+  class Batch {}
 
   /**
    * A contract that all API provider must adhere to
    */
-  export class APIBaseContract<
+  class APIBaseContract<
     PROMISE_RETURN,
     CALLBACK_RETURN,
     PARAM extends IAPIParam,
@@ -558,24 +399,24 @@ declare namespace DB {
     run<T extends PARAM>(param: T): Promise<PROMISE_RETURN>;
   }
 
-  export interface IGeoPointConstructor {
+  interface IGeoPointConstructor {
     new (longitude: number, latitide: number): GeoPoint;
     new (geojson: IGeoJSONPoint): GeoPoint;
     (longitude: number, latitide: number): GeoPoint;
     (geojson: IGeoJSONPoint): GeoPoint;
   }
 
-  export interface IGeoMultiPointConstructor {
+  interface IGeoMultiPointConstructor {
     new (points: GeoPoint[] | IGeoJSONMultiPoint): GeoMultiPoint;
     (points: GeoPoint[] | IGeoJSONMultiPoint): GeoMultiPoint;
   }
 
-  export interface IGeoLineStringConstructor {
+  interface IGeoLineStringConstructor {
     new (points: GeoPoint[] | IGeoJSONLineString): GeoLineString;
     (points: GeoPoint[] | IGeoJSONLineString): GeoLineString;
   }
 
-  export interface IGeoMultiLineStringConstructor {
+  interface IGeoMultiLineStringConstructor {
     new (
       lineStrings: GeoLineString[] | IGeoJSONMultiLineString
     ): GeoMultiLineString;
@@ -584,17 +425,17 @@ declare namespace DB {
     ): GeoMultiLineString;
   }
 
-  export interface IGeoPolygonConstructor {
+  interface IGeoPolygonConstructor {
     new (lineStrings: GeoLineString[] | IGeoJSONPolygon): GeoPolygon;
     (lineStrings: GeoLineString[] | IGeoJSONPolygon): GeoPolygon;
   }
 
-  export interface IGeoMultiPolygonConstructor {
+  interface IGeoMultiPolygonConstructor {
     new (polygons: GeoPolygon[] | IGeoJSONMultiPolygon): GeoMultiPolygon;
     (polygons: GeoPolygon[] | IGeoJSONMultiPolygon): GeoMultiPolygon;
   }
 
-  export interface IGeo {
+  interface IGeo {
     Point: IGeoPointConstructor;
     MultiPoint: IGeoMultiPointConstructor;
     LineString: IGeoLineStringConstructor;
@@ -603,37 +444,37 @@ declare namespace DB {
     MultiPolygon: IGeoMultiPolygonConstructor;
   }
 
-  export interface IGeoJSONPoint {
+  interface IGeoJSONPoint {
     type: "Point";
     coordinates: [number, number];
   }
 
-  export interface IGeoJSONMultiPoint {
+  interface IGeoJSONMultiPoint {
     type: "MultiPoint";
-    coordinates: [number, number][];
+    coordinates: Array<[number, number]>;
   }
 
-  export interface IGeoJSONLineString {
+  interface IGeoJSONLineString {
     type: "LineString";
-    coordinates: [number, number][];
+    coordinates: Array<[number, number]>;
   }
 
-  export interface IGeoJSONMultiLineString {
+  interface IGeoJSONMultiLineString {
     type: "MultiLineString";
-    coordinates: [number, number][][];
+    coordinates: Array<Array<[number, number]>>;
   }
 
-  export interface IGeoJSONPolygon {
+  interface IGeoJSONPolygon {
     type: "Polygon";
-    coordinates: [number, number][][];
+    coordinates: Array<Array<[number, number]>>;
   }
 
-  export interface IGeoJSONMultiPolygon {
+  interface IGeoJSONMultiPolygon {
     type: "MultiPolygon";
-    coordinates: [number, number][][][];
+    coordinates: Array<Array<Array<[number, number]>>>;
   }
 
-  export type IGeoJSONObject =
+  type IGeoJSONObject =
     | IGeoJSONPoint
     | IGeoJSONMultiPoint
     | IGeoJSONLineString
@@ -641,9 +482,9 @@ declare namespace DB {
     | IGeoJSONPolygon
     | IGeoJSONMultiPolygon;
 
-  export abstract class GeoPoint {
-    public longitude: number;
-    public latitude: number;
+  abstract class GeoPoint {
+    longitude: number;
+    latitude: number;
 
     constructor(longitude: number, latitude: number);
 
@@ -651,8 +492,8 @@ declare namespace DB {
     toString(): string;
   }
 
-  export abstract class GeoMultiPoint {
-    public points: GeoPoint[];
+  abstract class GeoMultiPoint {
+    points: GeoPoint[];
 
     constructor(points: GeoPoint[]);
 
@@ -660,8 +501,8 @@ declare namespace DB {
     toString(): string;
   }
 
-  export abstract class GeoLineString {
-    public points: GeoPoint[];
+  abstract class GeoLineString {
+    points: GeoPoint[];
 
     constructor(points: GeoPoint[]);
 
@@ -669,8 +510,8 @@ declare namespace DB {
     toString(): string;
   }
 
-  export abstract class GeoMultiLineString {
-    public lines: GeoLineString[];
+  abstract class GeoMultiLineString {
+    lines: GeoLineString[];
 
     constructor(lines: GeoLineString[]);
 
@@ -678,8 +519,8 @@ declare namespace DB {
     toString(): string;
   }
 
-  export abstract class GeoPolygon {
-    public lines: GeoLineString[];
+  abstract class GeoPolygon {
+    lines: GeoLineString[];
 
     constructor(lines: GeoLineString[]);
 
@@ -687,8 +528,8 @@ declare namespace DB {
     toString(): string;
   }
 
-  export abstract class GeoMultiPolygon {
-    public polygons: GeoPolygon[];
+  abstract class GeoMultiPolygon {
+    polygons: GeoPolygon[];
 
     constructor(polygons: GeoPolygon[]);
 
@@ -696,7 +537,7 @@ declare namespace DB {
     toString(): string;
   }
 
-  export type GeoInstance =
+  type GeoInstance =
     | GeoPoint
     | GeoMultiPoint
     | GeoLineString
@@ -704,17 +545,17 @@ declare namespace DB {
     | GeoPolygon
     | GeoMultiPolygon;
 
-  export interface IGeoNearCommandOptions {
+  interface IGeoNearCommandOptions {
     geometry: GeoPoint;
     maxDistance?: number;
     minDistance?: number;
   }
 
-  export interface IGeoWithinCommandOptions {
+  interface IGeoWithinCommandOptions {
     geometry: GeoPolygon | GeoMultiPolygon;
   }
 
-  export interface IGeoIntersectsCommandOptions {
+  interface IGeoIntersectsCommandOptions {
     geometry:
       | GeoPoint
       | GeoMultiPoint
@@ -724,104 +565,102 @@ declare namespace DB {
       | GeoMultiPolygon;
   }
 
-  export interface IServerDateOptions {
+  interface IServerDateOptions {
     offset: number;
   }
 
-  export abstract class ServerDate {
-    public readonly options: IServerDateOptions;
+  abstract class ServerDate {
+    readonly options: IServerDateOptions;
     constructor(options?: IServerDateOptions);
   }
 
-  export interface IRegExpOptions {
+  interface IRegExpOptions {
     regexp: string;
     options?: string;
   }
 
-  export interface IRegExpConstructor {
+  interface IRegExpConstructor {
     new (options: IRegExpOptions): RegExp;
     (options: IRegExpOptions): RegExp;
   }
 
-  export abstract class RegExp {
-    public readonly regexp: string;
-    public readonly options: string;
+  abstract class RegExp {
+    readonly regexp: string;
+    readonly options: string;
     constructor(options: IRegExpOptions);
   }
 
-  export type DocumentId = string | number;
+  type DocumentId = string | number;
 
-  export interface IDocumentData {
+  interface IDocumentData {
     _id?: DocumentId;
     [key: string]: any;
   }
 
-  export interface IDBAPIParam extends IAPIParam {}
+  type IDBAPIParam = IAPIParam;
 
-  export interface IAddDocumentOptions extends IDBAPIParam {
+  interface IAddDocumentOptions extends IDBAPIParam {
     data: IDocumentData;
   }
 
-  export interface IGetDocumentOptions extends IDBAPIParam {}
+  type IGetDocumentOptions = IDBAPIParam;
 
-  export interface ICountDocumentOptions extends IDBAPIParam {}
+  type ICountDocumentOptions = IDBAPIParam;
 
-  export interface IUpdateDocumentOptions extends IDBAPIParam {
+  interface IUpdateDocumentOptions extends IDBAPIParam {
     data: IUpdateCondition;
   }
 
-  export interface IUpdateSingleDocumentOptions extends IDBAPIParam {
+  interface IUpdateSingleDocumentOptions extends IDBAPIParam {
     data: IUpdateCondition;
   }
 
-  export interface ISetDocumentOptions extends IDBAPIParam {
+  interface ISetDocumentOptions extends IDBAPIParam {
     data: IUpdateCondition;
   }
 
-  export interface ISetSingleDocumentOptions extends IDBAPIParam {
+  interface ISetSingleDocumentOptions extends IDBAPIParam {
     data: IUpdateCondition;
   }
 
-  export interface IRemoveDocumentOptions extends IDBAPIParam {
+  interface IRemoveDocumentOptions extends IDBAPIParam {
     query: IQueryCondition;
   }
 
-  export interface IRemoveSingleDocumentOptions extends IDBAPIParam {}
+  type IRemoveSingleDocumentOptions = IDBAPIParam;
 
-  export interface IQueryCondition {
+  interface IQueryCondition {
     [key: string]: any;
   }
 
-  export type IStringQueryCondition = string;
+  type IStringQueryCondition = string;
 
-  export interface IQueryResult extends IAPISuccessParam {
+  interface IQueryResult extends IAPISuccessParam {
     data: IDocumentData[];
   }
 
-  export interface IQuerySingleResult extends IAPISuccessParam {
+  interface IQuerySingleResult extends IAPISuccessParam {
     data: IDocumentData;
   }
 
-  export interface IUpdateCondition {
+  interface IUpdateCondition {
     [key: string]: any;
   }
 
-  export type IStringUpdateCondition = string;
+  type IStringUpdateCondition = string;
 
-  export interface ISetCondition {}
-
-  export interface IAddResult extends IAPISuccessParam {
+  interface IAddResult extends IAPISuccessParam {
     _id: DocumentId;
   }
 
-  export interface IUpdateResult extends IAPISuccessParam {
+  interface IUpdateResult extends IAPISuccessParam {
     stats: {
       updated: number;
       // created: number,
     };
   }
 
-  export interface ISetResult extends IAPISuccessParam {
+  interface ISetResult extends IAPISuccessParam {
     _id: DocumentId;
     stats: {
       updated: number;
@@ -829,13 +668,13 @@ declare namespace DB {
     };
   }
 
-  export interface IRemoveResult extends IAPISuccessParam {
+  interface IRemoveResult extends IAPISuccessParam {
     stats: {
       removed: number;
     };
   }
 
-  export interface ICountResult extends IAPISuccessParam {
+  interface ICountResult extends IAPISuccessParam {
     total: number;
   }
 }
