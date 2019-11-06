@@ -5,7 +5,9 @@
     "dev": "gulp --continue",
     "build": "gulp build",
     "tsc": "./node_modules/typescript/bin/tsc",
-    "compile": "tsc"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "compile": "tsc",
+    "commit": "git cz"
   },
   "dependencies": {
     "miniprogram-computed": "0.0.6",
@@ -14,7 +16,10 @@
     "wxapp-session-request": "^1.1.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "autoprefixer": "^9.3.1",
+    "cz-conventional-changelog": "^3.0.2",
     "del": "^3.0.0",
     "dependency-tree": "^6.1.0",
     "gulp": "^4.0.0",
@@ -28,7 +33,8 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-sync": "^0.1.4",
     "gulp-typescript": "^5.0.0-alpha.3",
-    "husky": "^1.1.4",
+    "husky": "^1.3.1",
+    "match-requires": "^2.0.1",
     "path": "^0.12.7",
     "prettier": "^1.15.2",
     "pretty-quick": "^1.8.0",
@@ -36,12 +42,22 @@
     "through2": "^2.0.3",
     "tslint-config-prettier": "^1.16.0",
     "typescript": "^3.1.6",
-    "webpack": "^4.12.2",
-    "match-requires": "^2.0.1"
+    "webpack": "^4.12.2"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }

@@ -5,6 +5,7 @@
 - 使用 tslint + prettier 格式代码规范
 - 使用小程序官方 typing 库
 - npm 依赖包自动打包
+- 使用了 [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog) 方案自动生成 CHANGELOG
 
 ```bash
 # 安装依赖
@@ -19,6 +20,48 @@ npm run dev
 # 打包代码
 npm run build
 ```
+
+## 基本环境说明
+
+### husky
+
+1. 如果不希望在 git commit 的时候检查 commit 的规范，请在`package.json`文件中删掉`"commit-msg"`相关内容。
+2. 如果不希望在 git commit 的时候检查代码规范，请在`package.json`文件中删掉`"pre-commit"`相关内容。
+
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}
+```
+
+### commit 规范
+
+git commit 的 message 遵循 [Angular 规范](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#heading=h.greljkmo14y0)：
+
+```cmd
+<commit 类型，不可省略>(<功能模块，可省略>): <功能内容，不可省略>
+// 空一行
+<详细内容，可省略>
+// 空一行
+<关闭Issue，此处可省略>
+```
+
+commit 类型包括：
+
+- feat：新功能（feature）
+- fix：修补 bug
+- docs：文档（documentation）
+- style： 格式（不影响代码运行的变动）
+- refactor：重构（即不是新增功能，也不是修改 bug 的代码变动）
+- test：增加测试
+- chore：构建过程或辅助工具的变动
+
+如果 commit 类型为`feat`和`fix`，则该 commit 将现在 CHANGELOG.md 之中。
 
 ## 项目结构
 
