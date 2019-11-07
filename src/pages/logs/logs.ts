@@ -1,9 +1,10 @@
 //logs.js
 import { formatTime } from "../../utils/util";
+import globalDataBehavior from "../../common/behavior/globaldata-behavior";
 const computedBehavior = require("miniprogram-computed");
 
 Component({
-  behaviors: [computedBehavior],
+  behaviors: [computedBehavior, globalDataBehavior],
   data: {
     logs: [] as string[]
   },

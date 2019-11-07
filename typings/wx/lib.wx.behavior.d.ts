@@ -46,6 +46,7 @@ declare namespace WechatMiniprogram {
 
     type DefinitionFilter = Component.DefinitionFilter;
     type Lifetimes = Component.Lifetimes;
+    type PageLifetimes = Component.PageLifetimes;
 
     interface OtherOption {
       /** 类似于mixins和traits的组件间代码复用机制，参见 [behaviors](behaviors.md) */
@@ -54,6 +55,10 @@ declare namespace WechatMiniprogram {
        *
        * 最低基础库： `2.2.3` */
       definitionFilter?: DefinitionFilter;
+      /** 组件所在页面的生命周期声明对象，目前仅支持页面的 `show` 和 `hide` 两个生命周期
+       *
+       * 最低基础库： `2.2.3` */
+      pageLifetimes?: Partial<PageLifetimes>;
     }
   }
 }

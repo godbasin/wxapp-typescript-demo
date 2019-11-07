@@ -1,5 +1,9 @@
 <!--logs.wxml-->
 <view class="container log-list">
+  <block>
+    <text class="log-item">latestPropLog</text>
+    <text class="log-item">{{globalData.latestPropLog}}</text>
+  </block>
   <block wx:for="{{logsAfterComputed}}">
     <text class="log-item">{{index + 1}}. {{item.log}}</text>
     <text class="log-item">{{index + 1}}. {{item.logAfterCompute}}</text>
