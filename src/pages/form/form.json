@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "globalData Behavior",
+  "usingComponents": {
+    "weui-cells": "weui-miniprogram/cells/cells",
+    "weui-cell": "weui-miniprogram/cell/cell",
+    "weui-form": "weui-miniprogram/form/form",
+    "weui-toptips": "weui-miniprogram/toptips/toptips",
+    "weui-checkbox": "weui-miniprogram/checkbox/checkbox",
+    "weui-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group"
+  }
+}

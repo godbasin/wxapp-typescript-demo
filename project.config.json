@@ -14,9 +14,18 @@
     "postcss": true,
     "minified": true,
     "newFeature": true,
+    "coverView": true,
+    "nodeModules": true,
     "autoAudits": false,
     "checkInvalidKey": true,
-    "nodeModules": true
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "enhance": true
   },
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},

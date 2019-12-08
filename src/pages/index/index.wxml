@@ -1,14 +1,25 @@
-<!--index.wxml-->
-<view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+<!-- index.wxml -->
+<view class="page">
+  <view class="page__hd">
+    <view class="userinfo">
+      <button wx:if="{{!hasUserInfo && canIUseGetUserInfo}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
+        获取头像昵称
+      </button>
+      <block wx:else>
+        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      </block>
+    </view>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+  <view class="page__bd">
+    <weui-cells ext-class="my-cells" title="功能体验">
+      <weui-cell hover link value="watch属性" footer="去往watch页面" bind:tap="gotoOtherPage" data-page="/pages/watch/watch"></weui-cell>
+      <weui-cell hover link value="日志能力" footer="去往logs页面" bind:tap="gotoOtherPage" data-page="/pages/logs/logs"></weui-cell>
+      <weui-cell hover link value="globalData能力" footer="去往globalData页面" bind:tap="gotoOtherPage" data-page="/pages/global-data/global-data"></weui-cell>
+    </weui-cells>
+    <weui-cells ext-class="my-cells" title="页面体验">
+      <weui-cell hover link value="成功页" footer="去往result页面" bind:tap="gotoSuccess"></weui-cell>
+      <weui-cell hover link value="失败页" footer="去往result页面" bind:tap="gotoFail"></weui-cell>
+    </weui-cells>
   </view>
-  <button bind:tap="gotoWatch"> 去 watch behavior 页面 </button>
 </view>

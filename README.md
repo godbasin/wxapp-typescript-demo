@@ -1,18 +1,33 @@
-小程序 DEMO
+# 小程序 Typescript 最佳实践 DEMO
 
 - 使用 gulp 构建（支持 typescript 和 less）
 - 使用 typescript 编译
 - 使用 tslint + prettier 格式代码规范
 - 使用小程序官方 typing 库
-- npm 依赖包自动打包
+- 使用小程序 [weui 组件库](https://developers.weixin.qq.com/miniprogram/dev/extended/weui/)
 - 使用了 [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog) 方案自动生成 CHANGELOG
+
+## 封装了以下的能力
+
+| 相关能力            | 说明                                                                                                                                          |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| watch behavior      | 使用参考 [watch-behavior](https://github.com/godbasin/watch-behavior)                                                                         |
+| 日志能力            | 封装了 LogManager 和实时日志的能力                                                                                                            |
+| autolog behavior    | 配合日志能力，自动在 Component 中每一个方法调用的时候打印 log                                                                                 |
+| globalData behavior | 只需要在 Component 中引入 GlobalData，则可以使用全局状态的能力，[参考地址](https://godbasin.github.io/2019/11/09/wxapp-global-data-behavior/) |
+| 页面跳转库          | 解决了带参数、锁住原跳转页面等问题                                                                                                            |
+| request 通用请求库  | 处理包括 session 过期自动拉取登录接口续期等逻辑                                                                                               |
+
+## 安装使用
 
 ```bash
 # 安装依赖
 npm install
 
 # 全局安装依赖
-npm install gulp prettier typescript --global
+npm install gulp prettier typescript commitizen --global
+
+# 需要在小程序开发工具里【工具】-【构建npm】
 
 # 启动代码
 npm run dev
@@ -63,6 +78,8 @@ commit 类型包括：
 
 如果 commit 类型为`feat`和`fix`，则该 commit 将现在 CHANGELOG.md 之中。
 
+该项目更多使用方式参考[前端 CHANGELOG 生成指南](https://godbasin.github.io/2019/11/10/change-log/)。
+
 ## 项目结构
 
 ```
@@ -75,6 +92,7 @@ commit 类型包括：
 │  ├─assets                     	//静态资源
 │     ├─less						//公共less
 │     ├─img						    //图片资源
+│  ├─behaviors                     //通用behaviors
 │  ├─components                     //组件
 │  ├─utils                           //工具库
 │  ├─config                           //配置文档

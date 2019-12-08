@@ -1,6 +1,17 @@
-<view>a={{a}}</view>	
-<view>b.c.d={{b.c.d}}</view>
-<view>b.e[2][0]={{b.e[2][0]}}</view>
-<view>c={{c}}</view>
-<view>prop: {{propA}}</view>
-<button bindtap="onTap">click</button>
+<weui-toptips msg="{{msg}}" type="info" show="{{msg}}" delay="10000"></weui-toptips>
+<view class="page">
+    <weui-msg  title="展示 watch 能力">
+        <view slot="desc">第一次点击按钮，会重置所有 data 的值</view>
+        <view slot="extend">
+            <view>a={{a}}</view>	
+            <view>b.c.d={{b.c.d}}</view>
+            <view>b.e[2][0]={{b.e[2][0]}}</view>
+            <view>c={{c}}</view>
+            <view>prop: {{propA}}</view>
+        </view>
+        <view slot="handle">
+            <button wx:if="{{isFromApp}}" open-type="launchApp" binderror="launchAppFail" class="weui-btn" type="primary">回到App</button>
+            <button class="weui-btn" type="default" bind:tap="onTap">点击一次按钮，prop + 1</button>
+        </view>
+    </weui-msg>
+</view>

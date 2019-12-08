@@ -1,0 +1,16 @@
+<weui-toptips msg="{{msg}}" type="info" show="{{msg}}" delay="10000"></weui-toptips>
+<view class="page">
+    <weui-msg  title="展示 globalData 能力">
+        <view slot="desc">GlobalData 值如下：</view>
+        <view slot="extend">
+            <view>date={{globalData.date}}</view>	
+            <view>qq={{globalData.qq}}</view>	
+            <view>phone={{globalData.phone}}</view>	
+            <view>countryCodeIndex={{globalData.countryCodeIndex}}</view>
+            <view>isAgree={{globalData.isAgree}}</view>
+        </view>
+        <view slot="handle">
+            <button class="weui-btn" type="default" bind:tap="onTap">去更新 GlobalData</button>
+        </view>
+    </weui-msg>
+</view>

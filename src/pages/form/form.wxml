@@ -1,0 +1,49 @@
+<weui-toptips msg="{{msg}}" type="info" show="{{msg}}"></weui-toptips>
+<view class="page" xmlns:wx="http://www.w3.org/1999/xhtml">
+    <view class="page__bd">
+        <weui-form id="form">
+            <weui-cells title="表单" footer="底部说明文字底部说明文字">
+                <weui-cell prop="qq" title="qq" ext-class="">
+                    <input bindinput="formItemChange" data-field="qq" value="{{qq}}" class="weui-input" placeholder="请输入qq"/>
+                </weui-cell>
+                <weui-cell prop="date" title="日期" ext-class="">
+                    <picker data-field="date" mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="formItemChange">
+                        <view class="weui-input">{{date}}</view>
+                    </picker>
+                </weui-cell>
+            </weui-cells>
+        </weui-form>
+
+        <view class="weui-cells__title">选择</view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_select">
+                <view class="weui-cell__hd" style="width: 105px">
+                    <picker data-field="countryCodeIndex" bindchange="formItemChange" value="{{countryCodeIndex}}" range="{{countryCodes}}">
+                        <view class="weui-select">{{countryCodes[countryCodeIndex]}}</view>
+                    </picker>
+                </view>
+                <view class="weui-cell__bd weui-cell__bd_in-select-before">
+                    <input class="weui-input" value="{{phone}}" data-field="phone" bindinput="formItemChange" placeholder="请输入号码" />
+                </view>
+            </view>
+        </view>
+
+        <checkbox-group bindchange="bindAgreeChange">
+            <label class="weui-agree" for="weuiAgree">
+                <view class="weui-agree__text">
+                    <checkbox class="weui-agree__checkbox" id="weuiAgree" value="agree" checked="{{isAgree}}" />
+                    <view class="weui-agree__checkbox-icon">
+                        <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
+                    </view>
+                    阅读并同意<navigator url="" class="weui-agree__link">《相关条款》</navigator>
+                </view>
+            </label>
+        </checkbox-group>
+
+        <view class="weui-btn-area">
+            <button class="weui-btn" type="default" bindtap="getGlobalData">从GlobalData获取</button>
+            <button class="weui-btn" type="primary" bindtap="saveToGlobalData">保存到GlobalData</button>
+            <button class="weui-btn" type="primary" data-to-storage="true" bindtap="saveToGlobalData">保存到GlobalData Storage</button>
+        </view>
+    </view>
+</view>

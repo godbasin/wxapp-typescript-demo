@@ -1,0 +1,12 @@
+<view class="page">
+    <weui-msg type="{{type}}" title="{{title}}">
+        <view slot="desc">{{info}}</view>
+        <view slot="handle">
+            <button wx:if="{{isFromApp}}" open-type="launchApp" binderror="launchAppFail" class="weui-btn" type="primary">回到App</button>
+            <button class="weui-btn" type="default" bind:tap="clickReturn">完成</button>
+        </view>
+        <view slot="footer" wx:if="{{fotterText}}">
+            <view class="weui-footer__text">{{fotterText}}</view>
+        </view>
+    </weui-msg>
+</view>

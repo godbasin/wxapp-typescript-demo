@@ -1,3 +1,6 @@
+// 版本号，用于日志区分
+export const VERSION = "0.0.1";
+
 // APPID
 export const APPID = "";
 

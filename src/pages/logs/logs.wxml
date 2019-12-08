@@ -1,11 +1,15 @@
 <!--logs.wxml-->
 <view class="container log-list">
   <block>
-    <text class="log-item">latestPropLog</text>
-    <text class="log-item">{{globalData.latestPropLog}}</text>
+    <text class="log-item">Logs 日志</text>
   </block>
-  <block wx:for="{{logsAfterComputed}}">
-    <text class="log-item">{{index + 1}}. {{item.log}}</text>
+  <block wx:for="{{logs}}" wx:key="index">
+    <text class="log-item">{{index + 1}}. {{item}}</text>
+  </block>
+  <block>
+    <text class="log-item">以下仅用于 computed behavior 的使用展示</text>
+  </block>
+  <block wx:for="{{logsAfterComputed}}" wx:key="index">
     <text class="log-item">{{index + 1}}. {{item.logAfterCompute}}</text>
   </block>
 </view>

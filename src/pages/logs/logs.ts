@@ -1,11 +1,12 @@
 //logs.js
-import { formatTime } from "../../utils/util";
-import globalDataBehavior from "../../common/behavior/globaldata-behavior";
 const computedBehavior = require("miniprogram-computed");
+import autologBehavior from "../../behaviors/autolog-behavior";
+const PAGE_NAME = "logs";
 
 Component({
-  behaviors: [computedBehavior, globalDataBehavior],
+  behaviors: [computedBehavior, autologBehavior],
   data: {
+    PAGE_NAME,
     logs: [] as string[]
   },
   computed: {
@@ -14,7 +15,6 @@ Component({
       // 比如此字段可以通过 this.data.b 获取到
       return this.data.logs.map((x: string) => {
         return {
-          log: x,
           logAfterCompute: x + "logAfterCompute"
         };
       });
@@ -22,11 +22,8 @@ Component({
   },
   methods: {
     onLoad() {
-      console.log("onLoad");
       this.setData({
-        logs: (wx.getStorageSync("logs") || []).map((log: number) => {
-          return formatTime(new Date(log));
-        })
+        logs: wx.getStorageSync("logs") || []
       });
     }
   }

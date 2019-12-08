@@ -1,8 +1,7 @@
 const watchBehavior = require("miniprogram-watch");
-import globalDataBehavior from "../../common/behavior/globaldata-behavior";
 
 Component({
-  behaviors: [watchBehavior, globalDataBehavior],
+  behaviors: [watchBehavior],
   properties: {
     propA: {
       type: Number,
@@ -10,6 +9,7 @@ Component({
     }
   },
   data: {
+    msg: "",
     a: 0,
     b: {
       c: {
@@ -20,10 +20,10 @@ Component({
   },
   watch: {
     propA(val: any, oldVal: any) {
-      const latestPropLog = `propA new: ${val}, old: ${oldVal}`;
-      console.log(latestPropLog);
+      const msg = `propA new: ${val}, old: ${oldVal}`;
+      console.log(msg);
       // 内容输出到globalData
-      (this as any).setGlobalData({ latestPropLog });
+      this.setData({ msg });
     },
     a(val: any, oldVal: any) {
       console.log("a new: %s, old: %s", val, oldVal);
