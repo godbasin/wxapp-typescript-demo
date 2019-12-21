@@ -45,7 +45,7 @@ function mangeUrl(url, options: IOptions = {}) {
   if (pageParams) {
     globalPageParams = objectCopy(pageParams);
     globalPageParamsId = getRandomId();
-    url = addUrlParams(url, { randomId: globalPageParamsId });
+    url = addUrlParams(url, { randomid: globalPageParamsId });
   } else {
     globalPageParams = undefined;
     globalPageParamsId = undefined;

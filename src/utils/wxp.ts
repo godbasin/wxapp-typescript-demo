@@ -3,10 +3,7 @@ interface GWxApiOpts<T, K> {
   fail?: (callbackPayload: K) => any;
 }
 
-type WxApiOpts<T, K, V> = {
-  [X in keyof V]: V[X];
-} &
-  GWxApiOpts<T, K>;
+type WxApiOpts<T, K, V> = { [X in keyof V]: V[X] } & GWxApiOpts<T, K>;
 
 /**
  * 本方法将类似于 wx.request 等函数转化为 Promise 调用方式
@@ -40,7 +37,10 @@ const wxp = {
   navigateTo: promisify(wx.navigateTo),
   redirectTo: promisify(wx.redirectTo),
   navigateBack: promisify(wx.navigateBack),
-  reLaunch: promisify(wx.reLaunch)
+  reLaunch: promisify(wx.reLaunch),
+  getNetworkType: promisify(wx.getNetworkType),
+  getSystemInfo: promisify(wx.getSystemInfo),
+  showModal: promisify(wx.showModal)
 };
 
 export default wxp;

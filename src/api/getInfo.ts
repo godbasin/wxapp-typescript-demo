@@ -1,5 +1,5 @@
 import { API } from "../config/cgi-config";
-import { ICommonResp } from "./common";
+import { ICommonResp, IRequestOption } from "./common";
 import { request } from "../utils/request/index";
 
 export interface IGetInfoReq {
@@ -17,7 +17,14 @@ export interface IGetInfoResp {
   info: IMyInfo;
 }
 
-export default async function getInfo(req: IGetInfoReq) {
-  const resp: ICommonResp<IGetInfoResp> = await request(API.getInfo, req);
+export default async function getInfo(
+  req: IGetInfoReq,
+  options?: IRequestOption
+) {
+  const resp: ICommonResp<IGetInfoResp> = await request(
+    API.getInfo,
+    req,
+    options
+  );
   return resp.data;
 }

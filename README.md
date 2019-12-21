@@ -16,6 +16,7 @@
 | autolog behavior    | 配合日志能力，自动在 Component 中每一个方法调用的时候打印 log                                                                                 |
 | globalData behavior | 只需要在 Component 中引入 GlobalData，则可以使用全局状态的能力，[参考地址](https://godbasin.github.io/2019/11/09/wxapp-global-data-behavior/) |
 | 页面跳转库          | 解决了带参数、锁住原跳转页面等问题                                                                                                            |
+| pageparams behavior | 配合页面跳转库的跳转参数使用，如果使用 pageParams 来跳转传参，使用该 behavior 可以自动更新到 data 中                                          |
 | request 通用请求库  | 处理包括 session 过期自动拉取登录接口续期等逻辑                                                                                               |
 
 ## 安装使用
