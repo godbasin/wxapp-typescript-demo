@@ -13,15 +13,37 @@ var sourcemaps = require("gulp-sourcemaps");
 var jsonTransform = require("gulp-json-transform");
 var projectConfig = require("./package.json");
 
+// 支持 sass
+var sass = require("gulp-sass");
+sass.compiler = require("node-sass");
+
 //项目路径
 var option = {
   base: "src",
   allowEmpty: true
 };
 var dist = __dirname + "/dist";
-var copyPath = ["src/**/!(_)*.*", "!src/**/*.less", "!src/**/*.ts"];
+var copyPath = [
+  "src/**/!(_)*.*",
+  "!src/**/*.less",
+  "!src/**/*.sass",
+  "!src/**/*.scss",
+  "!src/**/*.ts"
+];
 var lessPath = ["src/**/*.less", "src/app.less"];
 var watchLessPath = ["src/**/*.less", "src/css/**/*.less", "src/app.less"];
+var sassPath = [
+  "src/**/*.sass",
+  "src/app.sass",
+  "src/**/*.scss",
+  "src/app.scss"
+];
+var watchSassPath = [
+  "src/**/*.sass",
+  "src/app.sass",
+  "src/**/*.scss",
+  "src/app.scss"
+];
 var tsPath = ["src/**/*.ts", "src/app.ts"];
 
 //清空目录
@@ -118,6 +140,44 @@ gulp.task("lessChange", () => {
     .pipe(gulp.dest(dist));
 });
 
+// 编译sass
+gulp.task("sass", () => {
+  return gulp
+    .src(sassPath, option)
+    .pipe(
+      sass().on("error", function(e) {
+        console.error(e.message);
+        this.emit("end");
+      })
+    )
+    .pipe(postcss([autoprefixer]))
+    .pipe(
+      rename(function(path) {
+        path.extname = ".wxss";
+      })
+    )
+    .pipe(gulp.dest(dist));
+});
+// 编译sass(只改动有变动的文件）
+gulp.task("sassChange", () => {
+  return gulp
+    .src(sassPath, option)
+    .pipe(changed(dist))
+    .pipe(
+      less().on("error", function(e) {
+        console.error(e.message);
+        this.emit("end");
+      })
+    )
+    .pipe(postcss([autoprefixer]))
+    .pipe(
+      rename(function(path) {
+        path.extname = ".wxss";
+      })
+    )
+    .pipe(gulp.dest(dist));
+});
+
 // 编译
 gulp.task("tsCompile", function() {
   return tsProject
@@ -133,7 +193,8 @@ gulp.task("watch", () => {
   gulp.watch(tsPath, gulp.series("tsCompile"));
   var watcher = gulp.watch(copyPath, gulp.series("copyChange"));
   gulp.watch(nodeModulesCopyPath, gulp.series("copyNodeModulesChange"));
-  gulp.watch(watchLessPath, gulp.series("less")); //Change
+  gulp.watch(watchLessPath, gulp.series("lessChange")); //Change
+  gulp.watch(watchSassPath, gulp.series("sassChange")); //Change
   watcher.on("change", function(event) {
     if (event.type === "deleted") {
       var filepath = event.path;
@@ -156,6 +217,7 @@ gulp.task(
       "copyNodeModules",
       "generatePackageJson",
       "less",
+      "sass",
       "tsCompile"
     ),
     "watch"
@@ -174,6 +236,7 @@ gulp.task(
       "copyNodeModules",
       "generatePackageJson",
       "less",
+      "sass",
       "tsCompile"
     )
   )

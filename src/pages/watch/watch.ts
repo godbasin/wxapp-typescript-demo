@@ -1,8 +1,8 @@
-import { getLogger } from "../../utils/log";
+// import { getLogger } from "../../utils/log";
 import autologBehavior from "../../behaviors/autolog-behavior";
 
 const PAGE_NAME = "watch";
-const logger = getLogger(PAGE_NAME);
+// const logger = getLogger(PAGE_NAME);
 
 Component({
   behaviors: [autologBehavior],

@@ -1,6 +1,6 @@
 # 小程序 Typescript 最佳实践 DEMO
 
-- 使用 gulp 构建（支持 typescript 和 less）
+- 使用 gulp 构建（支持 typescript 和 less/sass/scss）
 - 使用 typescript 编译
 - 使用 tslint + prettier 格式代码规范
 - 使用小程序官方 typing 库
@@ -12,10 +12,10 @@
 | 相关能力            | 说明                                                                                                                                          |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | watch behavior      | 使用参考 [watch-behavior](https://github.com/godbasin/watch-behavior)                                                                         |
-| 日志能力            | 封装了 LogManager 和实时日志的能力                                                                                                            |
-| autolog behavior    | 配合日志能力，自动在 Component 中每一个方法调用的时候打印 log                                                                                 |
+| 日志能力            | 封装了 LogManager 和实时日志的能力 ，[参考地址](https://godbasin.github.io/2019/12/07/wxapp-logs/)                                            |
+| autolog behavior    | 配合日志能力，自动在 Component 中每一个方法调用的时候打印 log，[参考地址](https://godbasin.github.io/2019/12/07/wxapp-logs/)                  |
 | globalData behavior | 只需要在 Component 中引入 GlobalData，则可以使用全局状态的能力，[参考地址](https://godbasin.github.io/2019/11/09/wxapp-global-data-behavior/) |
-| 页面跳转库          | 解决了带参数、锁住原跳转页面等问题                                                                                                            |
+| 页面跳转库          | 解决了带参数、锁住原跳转页面等问题，[参考地址](https://godbasin.github.io/2019/12/08/wxapp-navigate/)                                         |
 | pageparams behavior | 配合页面跳转库的跳转参数使用，如果使用 pageParams 来跳转传参，使用该 behavior 可以自动更新到 data 中                                          |
 | request 通用请求库  | 处理包括 session 过期自动拉取登录接口续期等逻辑                                                                                               |
 
