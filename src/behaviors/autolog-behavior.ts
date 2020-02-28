@@ -33,7 +33,7 @@ export default Behavior({
             ...args
           );
         }
-        originMethod.call(this, ev, ...args);
+        return originMethod.call(this, ev, ...args);
       };
     });
   }
