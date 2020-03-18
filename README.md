@@ -18,6 +18,10 @@
 | 页面跳转库          | 解决了带参数、锁住原跳转页面等问题，[参考地址](https://godbasin.github.io/2019/12/08/wxapp-navigate/)                                         |
 | pageparams behavior | 配合页面跳转库的跳转参数使用，如果使用 pageParams 来跳转传参，使用该 behavior 可以自动更新到 data 中                                          |
 | request 通用请求库  | 处理包括 session 过期自动拉取登录接口续期等逻辑                                                                                               |
+| promisify 工具库    | 将类似于 wx.request 等函数转化为 Promise 调用方式                                                                                             |
+
+**扫码可以简单体验下 DEMO：**  
+![](https://github-imglib-1255459943.cos.ap-chengdu.myqcloud.com/kittykitty_code.jpg)
 
 ## 安装使用
 
