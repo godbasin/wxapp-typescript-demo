@@ -1,6 +1,6 @@
 {
   "usingComponents": {
-    "weui-cell": "weui-miniprogram/cell/cell",
-    "weui-cells": "weui-miniprogram/cells/cells"
+    "weui-cell": "/miniprogram_npm/weui-miniprogram/cell/cell",
+    "weui-cells": "/miniprogram_npm/weui-miniprogram/cells/cells"
   }
 }

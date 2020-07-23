@@ -1,11 +1,11 @@
 {
   "navigationBarTitleText": "globalData Behavior",
   "usingComponents": {
-    "weui-cells": "weui-miniprogram/cells/cells",
-    "weui-cell": "weui-miniprogram/cell/cell",
-    "weui-form": "weui-miniprogram/form/form",
-    "weui-toptips": "weui-miniprogram/toptips/toptips",
-    "weui-checkbox": "weui-miniprogram/checkbox/checkbox",
-    "weui-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group"
+    "weui-cells": "/miniprogram_npm/weui-miniprogram/cells/cells",
+    "weui-cell": "/miniprogram_npm/weui-miniprogram/cell/cell",
+    "weui-form": "/miniprogram_npm/weui-miniprogram/form/form",
+    "weui-toptips": "/miniprogram_npm/weui-miniprogram/toptips/toptips",
+    "weui-checkbox": "/miniprogram_npm/weui-miniprogram/checkbox/checkbox",
+    "weui-checkbox-group": "/miniprogram_npm/weui-miniprogram/checkbox-group/checkbox-group"
   }
 }
