@@ -164,7 +164,7 @@ gulp.task("sassChange", () => {
     .src(sassPath, option)
     .pipe(changed(dist))
     .pipe(
-      less().on("error", function(e) {
+      sass().on("error", function(e) {
         console.error(e.message);
         this.emit("end");
       })
